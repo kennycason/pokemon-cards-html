@@ -1,0 +1,208 @@
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <style type="text/css">
+        .card-background-green {
+            background: linear-gradient(to bottom right,
+            violet, indigo, blue, green, yellow, orange, red
+            );
+        }
+        #pokemon-canvas {
+            width: 300px;
+            height: 200px;
+        }
+
+        .header-pokemon-name {
+            color: black;
+        }
+        .header-hp {
+            color: black;
+        }
+    </style>
+
+    <script>
+        // mandelbrot variables
+        let zoom = 10;
+        let offsetX = -0.75;
+        let offsetY = 0;
+        let zoomSpeed = 1.02;
+        let ctx, width, height;
+        let direction = 1;
+
+        // rainbow gradient + rotation variables
+        let rainbowColors = [0, 60, 120, 180, 240, 300]; // Hues for initial rainbow
+        let rainbowSpeed = 1; // Speed of hue shifting
+        let rainbowDirection = 1; // Forward or reverse
+        let contrastDirection = 1; // Expanding or shrinking contrast
+        let colorShiftSpeed = 1; // Speed of hue rotation per color
+        let contrastShiftSpeed = 0.5; // Speed of contrast changes
+        let contrastRange = 40; // Base contrast
+
+        function mandelbrotSet(x, y) {
+            let real = (x - width / 2) / zoom + offsetX;
+            let imag = (y - height / 2) / zoom + offsetY;
+
+            let cr = real;
+            let ci = imag;
+            let iter = 0;
+            const maxIter = 500;
+
+            while (iter < maxIter) {
+                const real2 = real * real - imag * imag + cr;
+                const imag2 = 2 * real * imag + ci;
+
+                real = real2;
+                imag = imag2;
+
+                if (real * real + imag * imag > 4) break;
+                iter++;
+            }
+
+            // Psychedelic Color Formula
+            const hue = (iter * 10 + (Date.now() / 50)) % 360; // Rotate hues over time
+            const lightness = iter < maxIter ? 40 + (Math.sin(iter / 10) * 30) : 10; // Dynamic pulsating lightness
+            const saturation = iter < maxIter ? 90 + (Math.cos(iter / 15) * 10) : 70; // Add variation in saturation
+
+            return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        }
+
+        function drawFractal() {
+            const imageData = ctx.createImageData(width, height);
+            for (let x = 0; x < width; x++) {
+                for (let y = 0; y < height; y++) {
+                    const color = mandelbrotSet(x, y);
+
+                    const index = (x + y * width) * 4;
+                    const hsl = color.match(/\d+/g);
+                    const h = parseInt(hsl[0]);
+                    const s = parseInt(hsl[1]);
+                    const l = parseInt(hsl[2]);
+
+                    const rgb = hslToRgb(h / 360, s / 100, l / 100);
+                    imageData.data[index + 0] = rgb[0];
+                    imageData.data[index + 1] = rgb[1];
+                    imageData.data[index + 2] = rgb[2];
+                    imageData.data[index + 3] = 255; // alpha
+                }
+            }
+            ctx.putImageData(imageData, 0, 0);
+
+            // Update zoom and offsets
+            zoom *= zoomSpeed ** direction;
+
+            // Adjust zoom ping-pong behavior
+            if (zoom > 1200 || zoom < 10) {
+                direction *= -1;
+            }
+
+            updateRainbowGradient();
+
+            requestAnimationFrame(drawFractal);
+        }
+
+        function hslToRgb(h, s, l) {
+            let r, g, b;
+
+            if (s === 0) {
+                r = g = b = l; // achromatic
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    return p;
+                };
+
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1 / 3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1 / 3);
+            }
+
+            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+        }
+
+        function updateRainbowGradient() {
+            const card = document.querySelector('.card-background-green');
+
+            // iterate each color in the rainbow array
+            for (let i = 0; i < rainbowColors.length; i++) {
+                rainbowColors[i] += rainbowSpeed * rainbowDirection;
+                if (rainbowColors[i] > 360) rainbowColors[i] -= 360; // Wrap around
+                if (rainbowColors[i] < 0) rainbowColors[i] += 360;  // Wrap around
+            }
+
+            // adjust contrast range for widening/shrinking effect
+            contrastRange += contrastShiftSpeed * contrastDirection;
+            if (contrastRange > 80 || contrastRange < 20) {
+                contrastDirection *= -1; // Ping-pong contrast
+            }
+
+            // generate gradient steps
+            const gradientSteps = rainbowColors.map((hue, index) => {
+                const lightness = 50 + Math.sin(Date.now() / 500 + index) * contrastRange;
+                const saturation = 80 + Math.cos(Date.now() / 800 + index) * 20;
+                return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+            }).join(", ");
+
+            card.style.background = `linear-gradient(${(Date.now() / 50) % 360}deg, ${gradientSteps})`;
+        }
+
+        window.onload = () => {
+            const canvas = document.getElementById('pokemon-canvas');
+            ctx = canvas.getContext('2d');
+            width = canvas.width;
+            height = canvas.height;
+            drawFractal();
+        };
+    </script>
+</head>
+</html>
+<body>
+<div class="grid-card-container">
+    <div class="grid-individual-card card-background-green">
+        <div class="header-basic-pokemon">Fractal Entity</div>
+        <div class="header-pokemon-name">Mandelbeast</div>
+        <div class="header-hp">HP</div>
+        <div class="header-type-icon">∞</div>
+        <div class="image-holder">
+            <canvas id="pokemon-canvas" width="300" height="200"></canvas>
+        </div>
+        <div class="description-below-image-empty"></div>
+        <div class="description-below-image">
+            <span class="description-below-image-background">Benoît’s gift to the universe.</span>
+        </div>
+
+        <div class="description-below-image-empty"></div>
+        <div class="attack-cost"></div>
+        <div class="attack-description">
+            <span class="attack-name">Recursive Growth</span> Iterates through space, expanding complexity with each transformation.
+        </div>
+        <div class="attack-damage">∞</div>
+
+        <div class="description-below-image-empty"></div>
+
+        <div class="weakness wrr-header">compute complexity</div>
+        <div class="resistance wrr-header">definition</div>
+        <div class="retreat wrr-header">iterations</div>
+        <div class="weakness wrr-cost">☻&nbsp;☻&nbsp;☻</div>
+        <div class="resistance wrr-cost">z = z² + c</div>
+        <div class="retreat wrr-cost">∞</div>
+        <div class="description-above-copyright">
+            <ul>
+                <li class="description-above-copyright-border">
+                    A fractal manifestation formed by infinite recursion. LV. ∞ #C1
+                </li>
+            </ul>
+        </div>
+        <div class="copyright">
+            <strong>Illus. Benoît B. Mandelbrot</strong> ©1980 Math Creatures.
+            <strong>∞/∞ 💫</strong>
+        </div>
+    </div>
+</div>
+</body>
+</html>
