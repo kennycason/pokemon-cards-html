@@ -1,0 +1,216 @@
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <style type="text/css">
+        .card-background-green {
+            background: linear-gradient(to bottom right,
+            #fdf5e6, #f4a460, #d2b48c, #deb887, #8b4513); /* desert colors */
+        }
+
+        #pokemon-canvas {
+            width: 300px;
+            height: 200px;
+        }
+
+        .header-pokemon-name {
+            color: black;
+        }
+
+        .header-hp {
+            color: black;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 3px 6px;
+            font-size: 10px;
+            border: none;
+            border-radius: 4px;
+            background: #8b4513; /* sesert brown */
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #a0522d; /* slightly lighter brown */
+        }
+        table td.rule {
+            padding: 0 15px;
+        }
+    </style>
+
+    <script>
+        let grid, nextGrid;
+        let rows = 50, cols = 75;
+        let cellSize = 4;
+        let probability = 0.2;
+        let ctx, width, height;
+        let isPaused = false;
+
+        function initGrid() {
+            grid = Array.from({ length: rows }, () =>
+                Array.from({ length: cols }, () => Math.random() < probability ? 1 : 0)
+            );
+            nextGrid = JSON.parse(JSON.stringify(grid));
+        }
+
+        function countNeighbors(x, y) {
+            let count = 0;
+            for (let dx = -1; dx <= 1; dx++) {
+                for (let dy = -1; dy <= 1; dy++) {
+                    if (dx === 0 && dy === 0) continue;
+                    let nx = (x + dx + rows) % rows;
+                    let ny = (y + dy + cols) % cols;
+                    count += grid[nx][ny];
+                }
+            }
+            return count;
+        }
+
+        function updateGrid() {
+            let aliveCount = 0;
+            for (let x = 0; x < rows; x++) {
+                for (let y = 0; y < cols; y++) {
+                    const neighbors = countNeighbors(x, y);
+                    if (grid[x][y] === 1) {
+                        nextGrid[x][y] = neighbors === 2 || neighbors === 3 ? 1 : 0;
+                    } else {
+                        nextGrid[x][y] = neighbors === 3 ? 1 : 0;
+                    }
+                    aliveCount += nextGrid[x][y];
+                }
+            }
+            [grid, nextGrid] = [nextGrid, grid];
+            document.querySelector('.header-hp').innerText = `${aliveCount} HP`;
+        }
+
+        function drawGrid() {
+            ctx.clearRect(0, 0, width, height); // Fix leftover cells
+            for (let x = 0; x < rows; x++) {
+                for (let y = 0; y < cols; y++) {
+                    ctx.fillStyle = grid[x][y] === 1 ? '#333333' : '#fdf5e6';
+                    ctx.fillRect(y * cellSize, x * cellSize, cellSize, cellSize);
+                }
+            }
+        }
+
+        function toggleCell(e) {
+            const rect = e.target.getBoundingClientRect();
+            const x = Math.floor((e.clientY - rect.top) / cellSize);
+            const y = Math.floor((e.clientX - rect.left) / cellSize);
+            grid[x][y] = grid[x][y] === 1 ? 0 : 1;
+        }
+
+        function resetSimulation() {
+            initGrid();
+        }
+
+        function adjustProbability(amount) {
+            probability = Math.max(0, Math.min(1, probability + amount));
+            resetSimulation();
+        }
+
+        function adjustZoom(amount) {
+            const maxZoom = 1;
+            const minZoom = 8;
+            cellSize = Math.max(maxZoom, Math.min(minZoom, cellSize + amount));
+
+            rows = Math.floor(height / cellSize);
+            cols = Math.floor(width / cellSize);
+            initGrid();
+            ctx.clearRect(0, 0, width, height); // Clear on zoom change
+        }
+
+        function gameLoop() {
+            if (!isPaused) {
+                updateGrid();
+                drawGrid();
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        window.onload = () => {
+            const canvas = document.getElementById('pokemon-canvas');
+            ctx = canvas.getContext('2d');
+            width = canvas.width;
+            height = canvas.height;
+            canvas.addEventListener('click', toggleCell);
+            initGrid();
+            gameLoop();
+        };
+    </script>
+</head>
+<body>
+<div class="grid-card-container">
+    <div class="grid-individual-card card-background-green">
+        <div class="header-basic-pokemon">Cellular Automaton</div>
+        <div class="header-pokemon-name">John Conway's Game of Life</div>
+        <div class="header-hp">0 HP</div>
+        <div class="header-type-icon">⚙</div>
+        <div class="image-holder">
+            <canvas id="pokemon-canvas" width="300" height="200"></canvas>
+        </div>
+        <div class="description-below-image-empty"></div>
+        <div class="description-below-image">
+            <span class="description-below-image-background">
+                Life ☯ Death
+            </span>
+        </div>
+        <div class="description-below-image-empty"></div>
+        <div class="attack-cost"></div>
+        <div class="attack-description">
+            <table>
+                <tr>
+                    <td>Neighbors</td>
+                    <td class="rule">Rules</td>
+                </tr>
+                <tr>
+                    <td>&lt; 2</td>
+                    <td class="rule">Die of underpopulation.</td>
+                </tr>
+                <tr>
+                    <td>2-3</td>
+                    <td class="rule">If alive, survive.</td>
+                </tr>
+                <tr>
+                    <td>&gt; 3</td>
+                    <td class="rule">Die of overpopulation.</td>
+                </tr>
+                <tr>
+                    <td>= 3</td>
+                    <td class="rule">If dead, become alive.</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="description-above-copyright">
+            <ul>
+                <li class="description-above-copyright-border">
+                    A cellular automaton that evolves based on local rules. LV. ∞ #C2
+                </li>
+            </ul>
+        </div>
+        <div class="description-below-image">
+            <div class="button-container">
+                <button onclick="resetSimulation()">Reset</button>
+                <button onclick="adjustProbability(0.1)">+Prob</button>
+                <button onclick="adjustProbability(-0.1)">-Prob</button>
+                <button onclick="adjustZoom(1)">+Zoom</button>
+                <button onclick="adjustZoom(-1)">-Zoom</button>
+                <button onclick="isPaused = !isPaused">Play/Pause</button>
+            </div>
+        </div>
+        <div class="copyright">
+            <strong>Illus. John H. Conway</strong> ©1970 Cellular Systems.
+            <strong>∞/∞ ⚙</strong>
+        </div>
+    </div>
+</div>
+</body>
+</html>
