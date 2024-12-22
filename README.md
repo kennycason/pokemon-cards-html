@@ -3,7 +3,7 @@
 
 <div style="display: flex; flex-wrap: wrap;">
 <img src="https://github.com/kennycason/pokemon-cards-html/blob/main/mandelbeast01.png?raw=true" width="45%"/>
-<img src="https://github.com/kennycason/pokemon-cards-html/blob/main/game-of-life.png?raw=true" width="45%"/>
+<img src="https://github.com/kennycason/pokemon-cards-html/blob/main/game-of-life01.png?raw=true" width="45%"/>
 <img src="https://github.com/kennycason/pokemon-cards-html/blob/main/the-suitespot.png?raw=true" width="45%"/>
 </div>
 
