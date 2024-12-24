@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <style>
+        body { background-color: black; margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
+        .card { width: 350px; height: 500px; border-radius: 20px; padding: 10px; display: flex; flex-direction: column; align-items: center; border: 10px solid #555; box-shadow: 0 0 20px #000; position: relative; overflow: hidden; }
+        .header { display: flex; justify-content: space-between; width: 100%; color: white; font-size: 18px; font-weight: bold; }
+        .visualizer { width: 300px; height: 200px; margin: 10px 0; border: 2px solid #555; background: black; }
+        .gradient { position: absolute; inset: 0; z-index: -1; animation: gradient 5s infinite linear; }
+        @keyframes gradient { 0%, 100% { background: #333; } 50% { background: #111; } }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="gradient"></div>
+    <div class="header">
+        <div>Dark Pulse</div>
+        <div>HP ∞</div>
+    </div>
+    <canvas class="visualizer"></canvas>
+    <div class="footer">Infinite Waves - LV. ∞ #D1</div>
+</div>
+<script>
+    const canvas = document.querySelector('.visualizer'), ctx = canvas.getContext('2d'), gradient = document.querySelector('.gradient')
+    canvas.width = 300; canvas.height = 200
+    const synth = new Tone.Synth().toDestination(), loop = new Tone.Loop(time => synth.triggerAttackRelease('C2', '8n', time), '8n')
+    const analyser = new Tone.Analyser('waveform', 256); synth.connect(analyser); Tone.Transport.bpm.value = 128; Tone.Transport.start(); loop.start(0)
+    const draw = () => {
+        const data = analyser.getValue(); ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.beginPath(); data.forEach((v, i) => { const x = i / data.length * canvas.width, y = (1 - v) * canvas.height / 2; i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y) })
+        ctx.strokeStyle = `hsl(${Math.random() * 360}, 100%, 50%)`; ctx.lineWidth = 2; ctx.stroke()
+        gradient.style.animationDuration = `${Math.random() * 2 + 1}s`
+        requestAnimationFrame(draw)
+    }
+    Tone.start().then(() => draw())
+</script>
+</body>
+</html>
