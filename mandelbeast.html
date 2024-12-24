@@ -160,48 +160,55 @@
         };
     </script>
 </head>
-</html>
 <body>
-<div class="grid-card-container">
-    <div class="grid-individual-card card-background-green">
-        <div class="header-basic-pokemon">Fractal Entity</div>
-        <div class="header-pokemon-name">Mandelbeast</div>
-        <div class="header-hp">HP</div>
-        <div class="header-type-icon">∞</div>
-        <div class="image-holder">
-            <canvas id="pokemon-canvas" width="300" height="200"></canvas>
-        </div>
-        <div class="description-below-image-empty"></div>
-        <div class="description-below-image">
-            <span class="description-below-image-background">Benoît’s gift to the universe.</span>
-        </div>
+<div class="card-container card-background-green">
+    <div class="card-header">
+        <div class="card-type">Fractal Entity</div>
+    </div>
 
-        <div class="description-below-image-empty"></div>
-        <div class="attack-cost"></div>
+    <div class="card-name-and-hp">
+        <div class="card-name">Mandelbeast</div>
+        <div class="card-hp">HP ∞</div>
+    </div>
+
+    <div class="card-image">
+        <canvas id="pokemon-canvas" width="300" height="200"></canvas>
+    </div>
+
+    <div class="card-flavor">
+        <span>Benoît’s gift to the universe.</span>
+    </div>
+
+    <div class="card-attack">
+        <div class="attack-name">Recursive Growth</div>
         <div class="attack-description">
-            <span class="attack-name">Recursive Growth</span> Iterates through space, expanding complexity with each transformation.
+            Iterates through space, expanding complexity with each transformation.
         </div>
         <div class="attack-damage">∞</div>
+    </div>
 
-        <div class="description-below-image-empty"></div>
 
-        <div class="weakness wrr-header">compute complexity</div>
-        <div class="resistance wrr-header">definition</div>
-        <div class="retreat wrr-header">iterations</div>
-        <div class="weakness wrr-cost">☻&nbsp;☻&nbsp;☻</div>
-        <div class="resistance wrr-cost">z = z² + c</div>
-        <div class="retreat wrr-cost">∞</div>
-        <div class="description-above-copyright">
-            <ul>
-                <li class="description-above-copyright-border">
-                    A fractal manifestation formed by infinite recursion. LV. ∞ #C1
-                </li>
-            </ul>
+    <div class="card-stats">
+        <div class="stat">
+            <span class="stat-label">compute complexity</span>
+            <span class="stat-text">☻&nbsp;☻&nbsp;☻</span>
         </div>
-        <div class="copyright">
-            <strong>Illus. Benoît B. Mandelbrot</strong> ©1980 Math Creatures.
-            <strong>∞/∞ 💫</strong>
+        <div class="stat">
+            <span class="stat-label">definition</span>
+            <span class="stat-text">z = z² + c</span>
         </div>
+        <div class="stat">
+            <span class="stat-label">iterations</span>
+            <span class="stat-text">∞</span>
+        </div>
+    </div>
+
+    <div class="card-description">
+        A fractal manifestation formed by infinite recursion. LV. ∞ #C1
+    </div>
+
+    <div class="card-footer">
+        <span>Illus. Benoît B. Mandelbrot ©1980 Math Creatures. ∞/∞ 💫</span>
     </div>
 </div>
 </body>
