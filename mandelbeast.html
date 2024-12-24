@@ -2,7 +2,7 @@
 <head>
     <link rel="stylesheet" href="style.css">
     <style type="text/css">
-        .card-background-green {
+        .card-background-rainbow {
             background: linear-gradient(to bottom right,
             violet, indigo, blue, green, yellow, orange, red
             );
@@ -126,7 +126,7 @@
         }
 
         function updateRainbowGradient() {
-            const card = document.querySelector('.card-background-green');
+            const card = document.querySelector('.card-background-rainbow');
 
             // iterate each color in the rainbow array
             for (let i = 0; i < rainbowColors.length; i++) {
@@ -161,7 +161,7 @@
     </script>
 </head>
 <body>
-<div class="card-container card-background-green">
+<div class="card-container card-background-rainbow">
     <div class="card-header">
         <div class="card-type">Fractal Entity</div>
     </div>
