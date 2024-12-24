@@ -2,7 +2,7 @@
 <head>
     <link rel="stylesheet" href="style.css">
     <style type="text/css">
-        .card-background-desert {
+        .card-background-green {
             background: linear-gradient(to bottom right,
             #fdf5e6, #f4a460, #d2b48c, #deb887, #8b4513); /* desert colors */
         }
@@ -10,6 +10,14 @@
         #pokemon-canvas {
             width: 300px;
             height: 200px;
+        }
+
+        .header-pokemon-name {
+            color: black;
+        }
+
+        .header-hp {
+            color: black;
         }
 
         .button-container {
@@ -32,37 +40,8 @@
         button:hover {
             background: #a0522d; /* slightly lighter brown */
         }
-
-        /* Rules Container */
-        .rules-container {
-            grid-column: 1 / -1;
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-
-        /* Rules Table */
-        .rules-container table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        /* Table Cells */
-        .rules-container td {
-            padding: 4px 6px;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        /* Bold Headers */
-        .rules-container td:first-child {
-            font-weight: bold;
-        }
-
-        /* Rule Text Alignment */
-        .rules-container .rule {
-            text-align: left;
-            font-style: normal;
+        table td.rule {
+            padding: 0 15px;
         }
     </style>
 
@@ -108,7 +87,7 @@
                 }
             }
             [grid, nextGrid] = [nextGrid, grid];
-            document.querySelector('.card-hp').innerText = `${aliveCount} HP`;
+            document.querySelector('.header-hp').innerText = `${aliveCount} HP`;
         }
 
         function drawGrid() {
@@ -168,33 +147,31 @@
     </script>
 </head>
 <body>
-<div class="card-container card-background-desert">
-    <div class="card-header">
-        <div class="card-type">Cellular Automaton</div>
-    </div>
-
-    <div class="card-name-and-hp">
-        <div class="card-name">Game of Life</div>
-        <div class="card-hp">0 HP</div>
-    </div>
-
-    <div class="card-image">
-        <canvas id="pokemon-canvas" width="300" height="200"></canvas>
-    </div>
-
-    <div class="card-flavor">
-        <span>Life ☯ Death</span>
-    </div>
-
-    <div class="card-attack">
-        <div class="rules-container">
+<div class="grid-card-container">
+    <div class="grid-individual-card card-background-green">
+        <div class="header-basic-pokemon">Cellular Automaton</div>
+        <div class="header-pokemon-name">Game of Life</div>
+        <div class="header-hp">0 HP</div>
+        <div class="header-type-icon">⚙</div>
+        <div class="image-holder">
+            <canvas id="pokemon-canvas" width="300" height="200"></canvas>
+        </div>
+        <div class="description-below-image-empty"></div>
+        <div class="description-below-image">
+            <span class="description-below-image-background">
+                Life ☯ Death
+            </span>
+        </div>
+        <div class="description-below-image-empty"></div>
+        <div class="attack-cost"></div>
+        <div class="attack-description">
             <table>
                 <tr>
-                    <td><strong>Neighbors</strong></td>
-                    <td class="rule"><strong>Rules</strong></td>
+                    <td>Neighbors</td>
+                    <td class="rule">Rules</td>
                 </tr>
                 <tr>
-                    <td>&lt 2</td>
+                    <td>&lt; 2</td>
                     <td class="rule">Die of underpopulation.</td>
                 </tr>
                 <tr>
@@ -206,30 +183,33 @@
                     <td class="rule">Die of overpopulation.</td>
                 </tr>
                 <tr>
-                    <td>&equals; 3</td>
+                    <td>= 3</td>
                     <td class="rule">If dead, become alive.</td>
                 </tr>
             </table>
         </div>
-    </div>
 
-    <div class="card-description">
-        A cellular automaton that evolves based on local rules. LV. ∞ #C2
-    </div>
-
-    <div class="card-footer">
-        <div class="button-container">
-            <button onclick="resetSimulation()">Reset</button>
-            <button onclick="adjustProbability(0.1)">+Prob</button>
-            <button onclick="adjustProbability(-0.1)">-Prob</button>
-            <button onclick="adjustZoom(1)">+Zoom</button>
-            <button onclick="adjustZoom(-1)">-Zoom</button>
-            <button onclick="isPaused = !isPaused">Play/Pause</button>
+        <div class="description-above-copyright">
+            <ul>
+                <li class="description-above-copyright-border">
+                    A cellular automaton that evolves based on local rules. LV. ∞ #C2
+                </li>
+            </ul>
         </div>
-    </div>
-
-    <div class="card-footer">
-        <span><strong>Illus. John H. Conway</strong> ©1970 Cellular Systems. ∞/∞ ⚙</span>
+        <div class="description-below-image">
+            <div class="button-container">
+                <button onclick="resetSimulation()">Reset</button>
+                <button onclick="adjustProbability(0.1)">+Prob</button>
+                <button onclick="adjustProbability(-0.1)">-Prob</button>
+                <button onclick="adjustZoom(1)">+Zoom</button>
+                <button onclick="adjustZoom(-1)">-Zoom</button>
+                <button onclick="isPaused = !isPaused">Play/Pause</button>
+            </div>
+        </div>
+        <div class="copyright">
+            <strong>Illus. John H. Conway</strong> ©1970 Cellular Systems.
+            <strong>∞/∞ ⚙</strong>
+        </div>
     </div>
 </div>
 </body>

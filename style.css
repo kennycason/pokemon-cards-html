@@ -22,6 +22,23 @@ body {
     #fdf5e6, #f4a460, #d2b48c, #deb887, #8b4513);
 }
 
+.card-background-blue {
+    /* Second class to set BLUE card backgrounds for WATER types */
+    background: linear-gradient(to bottom right, #d9e4ec, #adc1d1, #7d99af, #557792, #7d99af, #adc1d1);
+}
+.card-background-redorange {
+    /* Second class to set RED-ORANGE card backgrounds for FIRE types */
+    background: linear-gradient(to bottom right, #ffbfba, #ff978f, #ff756b, #ff594c, #ff756b, #ff978f);
+}
+.card-background-green {
+    /* Second class to set GREEN card backgrounds for PLANT/LEAF/GRASS types */
+    background: linear-gradient(to bottom right, #aae5b7, #78cf8b, #4fb665, #319d49, #4fb665, #78cf8b);
+}
+.card-background-yellow {
+    /* Second class to set YELLOW card backgrounds for ELECTRIC/LIGHTNING types */
+    background: linear-gradient(to bottom right, #ffffa4, #fff870, #fff200, #fff870, #ffffa4, #fff870);
+}
+
 /* Header Row */
 .card-header {
     width: 100%;
@@ -34,7 +51,7 @@ body {
 /* Name and HP Row */
 .card-name-and-hp {
     display: flex;
-    justify-content: space-between; /* Pushes name left and HP right */
+    justify-content: space-between;
     width: 100%;
     padding-bottom: 8px;
 }
@@ -55,12 +72,30 @@ body {
 .card-image {
     width: 300px;
     height: 200px;
-    border: 5px yellow outset;
-    box-shadow: 3px 3px 10px #000;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    border: 3px yellow outset;
+    box-shadow: 3px 3px 10px #000;
+    box-sizing: border-box;
 }
+
+/* Ensure the canvas fills the container without scaling */
+.card-image canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Image Scaling */
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
 
 /* Flavor Text */
 .card-flavor {
@@ -73,29 +108,36 @@ body {
 
 /* Attack Row */
 .card-attack {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
     width: 95%;
+    display: grid;
+    grid-template-columns: 80px 1fr 40px;
+    align-items: center;
+    padding: 10px;
     border: 1px solid #aaa;
     border-bottom: 1px solid black;
 }
 
+/* Attack Name */
 .attack-name {
     font-weight: bold;
-}
-
-.attack-description {
-    flex-grow: 1;
+    padding-left: 5px;
     text-align: left;
-    padding: 0 10px;
-    font-size: 14px;
 }
 
+/* Attack Description */
+.attack-description {
+    font-size: 14px;
+    padding: 0 10px;
+    text-align: left;
+}
+
+/* Attack Damage */
 .attack-damage {
+    text-align: right;
     font-size: 18px;
     font-weight: bold;
+    padding-right: 5px;
+    white-space: nowrap;
 }
 
 /* Stats Row */
@@ -110,9 +152,9 @@ body {
 /* Individual Stat */
 .stat {
     display: flex;
-    flex-direction: column; /* Stack label and text vertically */
-    align-items: center; /* Center horizontally */
-    justify-content: center; /* Center vertically */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     flex: 1; /* Equal width columns */
 }
@@ -120,27 +162,28 @@ body {
 /* Stat Label */
 .stat-label {
     font-weight: bold;
-    height: 50%; /* Fixed height for the top half */
+    height: 50%;
     display: flex;
-    align-items: flex-start; /* Center vertically */
-    justify-content: center; /* Center horizontally */
+    align-items: flex-start;
+    justify-content: center;
 }
 
 /* Stat Text */
 .stat-text {
-    height: 50%; /* Fixed height for the bottom half */
+    height: 50%;
     display: flex;
-    align-items: center; /* Center vertically */
-    justify-content: center; /* Center horizontally */
+    align-items: center;
+    justify-content: center;
 }
 
 /* Description Row */
 .card-description {
-    width: 95%;
+    width: 97%;
     text-align: center;
     font-style: italic;
     font-size: 10px;
     padding: 5px;
+    margin-top: 4px;
     margin-bottom: 5px;
     border: 1px ridge gold;
     border-radius: 4px;
@@ -151,4 +194,5 @@ body {
     text-align: center;
     font-size: 8px;
     margin-top: auto;
+    padding: 5px;
 }
