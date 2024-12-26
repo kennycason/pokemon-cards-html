@@ -100,7 +100,14 @@
         .card-footer {
             color: white;
         }
+
+        mjx-container {
+            font-size: 12px;
+            color: white;
+        }
     </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 <div class="card-container">
@@ -121,23 +128,19 @@
         <table>
             <tr>
                 <td>Total Energy</td>
-                <td>E = mc<sup>2</sup></td>
+                <td>\( E = mc^2 \)</td>
             </tr>
             <tr>
                 <td>Schwarzschild Radius</td>
-                <td>R<sub>s</sub> = 2GM / c²</td>
+                <td>\( R_s = \frac{2GM}{c^2} \)</td>
             </tr>
             <tr>
                 <td>Escape Velocity</td>
-                <td>v = √(2GM / r)</td>
-            </tr>
-            <tr>
-                <td>Gravitational Redshift</td>
-                <td>z = (1 - 2GM/rc²)<sup>-1/2</sup> - 1</td>
+                <td>\( v = \sqrt{\frac{2GM}{r}} \)</td>
             </tr>
             <tr>
                 <td>Entropy</td>
-                <td>S = kA / 4ℓ<sup>2</sup></td>
+                <td>\( S = \frac{kA}{4\ell^2} \)</td>
             </tr>
         </table>
     </div>
